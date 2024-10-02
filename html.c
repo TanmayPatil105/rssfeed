@@ -108,7 +108,7 @@ get_date (char *file)
   if (stat (file, &fs) != 0)
     utils_throw_error ("Unable to stat file");
 
-  crt = fs.st_ctime;
+  crt = fs.st_mtime;
 
   tm = localtime (&crt);
 
