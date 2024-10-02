@@ -188,7 +188,11 @@ xml_dump (Config *config,
   if (config->lang)
     dump_channel_value (fptr, config->lang, "<language>", "</language>");
 
-  dump_blog_item (fptr, html);
+  while (html != NULL)
+    {
+      dump_blog_item (fptr, html);
+      html = html->prev;
+    }
 
   dump_footer (fptr);
 }

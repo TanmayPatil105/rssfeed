@@ -27,6 +27,7 @@ html_new ()
     utils_throw_error ("Not enough memory");
 
   html->link = NULL;
+  html->prev = NULL;
 
   return html;
 }
