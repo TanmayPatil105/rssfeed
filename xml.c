@@ -10,7 +10,7 @@
 #define XML_FILE "index.xml"
 
 static void
-dump_header (FILE *fptr)
+xml_dump_header (FILE *fptr)
 {
   char template[200];
 
@@ -23,7 +23,7 @@ dump_header (FILE *fptr)
 }
 
 static void
-dump_footer (FILE *fptr)
+xml_dump_footer (FILE *fptr)
 {
   char template[100];
 
@@ -35,10 +35,10 @@ dump_footer (FILE *fptr)
 }
 
 static void
-dump_channel_value (FILE *fptr,
-                    char *value,
-                    char *start_tag,
-                    char *end_tag)
+xml_dump_channel_value (FILE *fptr,
+                        char *value,
+                        char *start_tag,
+                        char *end_tag)
 {
   char template[200];
 
@@ -50,8 +50,8 @@ dump_channel_value (FILE *fptr,
 }
 
 static void
-dump_channel_rss_link (FILE *fptr,
-                       char *link)
+xml_dump_channel_rss_link (FILE *fptr,
+                           char *link)
 {
   char template[200];
 
@@ -74,7 +74,7 @@ dump_blog_header (FILE *fptr)
 }
 
 static void
-dump_blog_footer (FILE *fptr)
+xml_dump_blog_footer (FILE *fptr)
 {
   char template[20];
 
@@ -117,8 +117,8 @@ replace_tags (char *desc)
 }
 
 static void
-dump_blog_description (FILE *fptr,
-                       char *desc)
+xml_dump_blog_description (FILE *fptr,
+                           char *desc)
 {
   fprintf (fptr, "\t\t\t<description>\n");
 
@@ -128,10 +128,10 @@ dump_blog_description (FILE *fptr,
 }
 
 static void
-dump_blog_value (FILE *fptr,
-                 char *value,
-                 char *start_tag,
-                 char *end_tag)
+xml_dump_blog_value (FILE *fptr,
+                     char *value,
+                     char *start_tag,
+                     char *end_tag)
 {
   char template[200];
 
@@ -143,24 +143,44 @@ dump_blog_value (FILE *fptr,
 }
 
 static void
-dump_blog_item (FILE *fptr,
-                Html *html)
+xml_dump_blog_item (FILE *fptr,
+                    Html *html)
 {
   dump_blog_header (fptr);
 
   if (html->title)
-    dump_blog_value (fptr, html->title, "<title>", "</title>");
+    xml_dump_blog_value (fptr, html->title, "<title>", "</title>");
 
   if (html->link)
-    dump_blog_value (fptr, html->link, "<link>", "</link>");
+    xml_dump_blog_value (fptr, html->link, "<link>", "</link>");
 
   if (html->pubdate)
-    dump_blog_value (fptr, html->pubdate, "<pubDate>", "</pubDate>");
+    xml_dump_blog_value (fptr, html->pubdate, "<pubDate>", "</pubDate>");
 
   if (html->desc)
-    dump_blog_description (fptr, html->desc);
+    xml_dump_blog_description (fptr, html->desc);
 
-  dump_blog_footer (fptr);
+  xml_dump_blog_footer (fptr);
+}
+
+static void
+xml_dump_config (FILE   *fptr,
+                 Config *config)
+{
+  if (config->title)
+    xml_dump_channel_value (fptr, config->title, "<title>", "</title>");
+
+  if (config->url)
+    xml_dump_channel_value (fptr, config->url, "<link>", "</link>");
+
+  if (config->description)
+    xml_dump_channel_value (fptr, config->description, "<description>", "</description>");
+
+  if (config->link)
+    xml_dump_channel_rss_link (fptr, config->link);
+
+  if (config->lang)
+    xml_dump_channel_value (fptr, config->lang, "<language>", "</language>");
 }
 
 void
@@ -171,28 +191,15 @@ xml_dump (Config *config,
 
   fptr = fopen (XML_FILE, "w");
 
-  dump_header (fptr);
+  xml_dump_header (fptr);
 
-  if (config->title)
-    dump_channel_value (fptr, config->title, "<title>", "</title>");
-
-  if (config->url)
-    dump_channel_value (fptr, config->url, "<link>", "</link>");
-
-  if (config->description)
-    dump_channel_value (fptr, config->description, "<description>", "</description>");
-
-  if (config->link)
-    dump_channel_rss_link (fptr, config->link);
-
-  if (config->lang)
-    dump_channel_value (fptr, config->lang, "<language>", "</language>");
+  xml_dump_config (fptr, config);
 
   while (html != NULL)
     {
-      dump_blog_item (fptr, html);
+      xml_dump_blog_item (fptr, html);
       html = html->prev;
     }
 
-  dump_footer (fptr);
+  xml_dump_footer (fptr);
 }
