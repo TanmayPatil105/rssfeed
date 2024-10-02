@@ -18,7 +18,7 @@ form_html_link (char *url,
   char link[100];
 
   strcpy (link, url);
-  strcpy (link, "/");
+  strcat (link, "/");
   strcat (link, file);
 
   return strdup (link);
@@ -40,7 +40,7 @@ main (int   argc,
 
   html = html_read_from_file (argv[1]);
 
-  html->link = form_html_link (config->link, argv[1]);
+  html->link = form_html_link (config->url, argv[1]);
 
   xml_dump (config, html);
 

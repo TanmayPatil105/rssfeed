@@ -20,7 +20,7 @@ $(OBJS): $(SRCS)
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
-install:
+install: $(TARGET)
 	@echo "Installing $(BIN_DIR)/$(TARGET) ..."
 	$(INSTALL) $(TARGET) "$(BIN_DIR)/$(TARGET)"
 
