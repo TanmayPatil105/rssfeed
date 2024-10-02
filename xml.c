@@ -5,6 +5,7 @@
 #include "xml.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #define XML_FILE "index.xml"
 
@@ -83,13 +84,45 @@ dump_blog_footer (FILE *fptr)
   fprintf (fptr, "%s", template);
 }
 
+
+static char *
+replace_tags (char *desc)
+{
+  char chgd[400]; /* MAX_DESC_LEN + 100 */
+  char *ptr = chgd;
+
+  while (*desc != '\0')
+    {
+      if (*desc == '<')
+        {
+          strcpy (ptr, "&lt;");
+          ptr += 4;
+        }
+      else if (*desc == '>')
+        {
+          strcpy (ptr, "&gt;");
+          ptr += 4;
+        }
+       else
+        {
+          *ptr++ = *desc;
+        }
+
+      desc++;
+    }
+
+  *ptr = '\0';
+
+  return strdup (chgd);
+}
+
 static void
 dump_blog_description (FILE *fptr,
                        char *desc)
 {
   fprintf (fptr, "\t\t\t<description>\n");
 
-  fprintf (fptr, "%s\n", desc);
+  fprintf (fptr, "%s\n", replace_tags (desc));
 
   fprintf (fptr, "\t\t\t</description>\n");
 }
