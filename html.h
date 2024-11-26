@@ -5,6 +5,9 @@
 #ifndef HTML_H
 #define HTML_H
 
+#define MAX_TITLE_LEN 100
+#define MAX_DESC_LEN  500
+
 typedef struct Html
 {
   char *title;   /* Title of the blog */

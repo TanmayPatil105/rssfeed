@@ -88,7 +88,7 @@ xml_dump_blog_footer (FILE *fptr)
 static char *
 replace_tags (char *desc)
 {
-  char chgd[400]; /* MAX_DESC_LEN + 100 */
+  char chgd[MAX_DESC_LEN + 200];
   char *ptr = chgd;
 
   while (*desc != '\0')

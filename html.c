@@ -13,9 +13,6 @@
 #include <sys/stat.h>
 
 
-#define MAX_TITLE_LEN 100
-#define MAX_DESC_LEN 300
-
 Html *
 html_new ()
 {
