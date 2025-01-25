@@ -88,7 +88,7 @@ xml_dump_blog_footer (FILE *fptr)
 static char *
 replace_tags (char *desc)
 {
-  char chgd[MAX_DESC_LEN + 200];
+  char chgd[MAX_DESC_LEN + 1000];
   char *ptr = chgd;
 
   while (*desc != '\0')
@@ -102,6 +102,21 @@ replace_tags (char *desc)
         {
           strcpy (ptr, "&gt;");
           ptr += 4;
+        }
+      else if (*desc == '&')
+        {
+          strcpy (ptr, "&amp;");
+          ptr += 5;
+        }
+      else if (*desc == '"')
+        {
+          strcpy (ptr, "&quot;");
+          ptr += 6;
+        }
+      else if (*desc == '\'')
+        {
+          strcpy (ptr, "&apos;");
+          ptr += 6;
         }
        else
         {
