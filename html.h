@@ -5,8 +5,8 @@
 #ifndef HTML_H
 #define HTML_H
 
-#define MAX_TITLE_LEN 100
-#define MAX_DESC_LEN  500
+#define MAX_TITLE_LEN 200
+#define MAX_DESC_LEN  10000
 
 typedef struct Html
 {

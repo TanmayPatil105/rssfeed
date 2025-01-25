@@ -85,7 +85,18 @@ html_parse (FILE *fptr,
             }
           else if (is_body && body_len < MAX_DESC_LEN - 1)
             {
-              desc[body_len++] = *ptr++;
+              if (*ptr == '\n')
+                {
+                  desc[body_len++] = '\n';
+                  desc[body_len++] = '\t';
+                  desc[body_len++] = '\t';
+                  desc[body_len++] = '\t';
+                  ptr += 1;
+                }
+              else
+                {
+                  desc[body_len++] = *ptr++;
+                }
             }
           else
             {
