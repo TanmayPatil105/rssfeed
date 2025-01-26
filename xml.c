@@ -84,6 +84,40 @@ xml_dump_blog_footer (FILE *fptr)
   fprintf (fptr, "%s", template);
 }
 
+enum
+{
+  CHAR_NEWLINE = 0,
+  CHAR_LESS_THAN,
+  CHAR_GREATER_THAN,
+  CHAR_AMPERSAND,
+  CHAR_DOUBLE_QUOTE,
+  CHAR_SINGLE_QUOTE,
+  N_CHARS
+};
+
+static struct {
+  char c;
+  char str[20];
+} chars[N_CHARS] = {
+  { '\n', "\n\t\t\t"}, /* newline formatting */
+  { '<',  "&lt;" },
+  { '>',  "&gt;" },
+  { '&',  "&amp;" },
+  { '"',  "&quot;" },
+  { '\'', "&apos;" },
+};
+
+static inline unsigned int
+get_char_index (char c)
+{
+  for (unsigned int i = 0; i < N_CHARS; i++)
+    {
+      if (c == chars[i].c)
+        return i;
+    }
+
+  return N_CHARS;
+}
 
 static char *
 replace_tags (char *desc)
@@ -93,34 +127,23 @@ replace_tags (char *desc)
 
   while (*desc != '\0')
     {
-      if (*desc == '<')
-        {
-          strcpy (ptr, "&lt;");
-          ptr += 4;
-        }
-      else if (*desc == '>')
-        {
-          strcpy (ptr, "&gt;");
-          ptr += 4;
-        }
-      else if (*desc == '&')
-        {
-          strcpy (ptr, "&amp;");
-          ptr += 5;
-        }
-      else if (*desc == '"')
-        {
-          strcpy (ptr, "&quot;");
-          ptr += 6;
-        }
-      else if (*desc == '\'')
-        {
-          strcpy (ptr, "&apos;");
-          ptr += 6;
-        }
+       unsigned int index;
+
+       index = get_char_index (*desc);
+
+       if (index == N_CHARS)
+         {
+           *ptr++ = *desc;
+         }
        else
         {
-          *ptr++ = *desc;
+          char *str;
+
+          str = chars[index].str;
+
+          strcpy (ptr, str);
+
+          ptr += strlen (str);
         }
 
       desc++;

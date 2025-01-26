@@ -1,0 +1,4 @@
+*.o
+rssfeed
+config.rss
+index.xml
